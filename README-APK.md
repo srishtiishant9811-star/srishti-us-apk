@@ -1,6 +1,10 @@
-# Only us • APK & ZIP Download Guide
+# Only us • APK & Release Guide
 
-This guide explains how to install **Only us (Ishant AI)** on your Android phone as an **APK** or installable app, and how to use the downloaded ZIP project.
+Official mobile application repository for **Only us** (Ishant AI for Srishti).
+
+- **Current Version:** 1.0.1
+- **Platform:** Android (Capacitor Native APK + WebAPK)
+- **Engine:** Instant Ishant AI Companion
 
 ---
 

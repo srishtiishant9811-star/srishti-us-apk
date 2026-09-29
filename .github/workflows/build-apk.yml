@@ -24,6 +24,14 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-34 build-tools;34.0.0'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
       - name: Set up Node.js 20
         uses: actions/setup-node@v4
         with:
@@ -52,13 +60,13 @@ jobs:
           chmod +x android/gradlew
 
       - name: Build Android Debug APK
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
-          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
         run: |
-          yes | sdkmanager --licenses 2>/dev/null || true
           cd android
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          if ! ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/gradle_output.log; then
+            echo "==================== BUILD FAILED - RECENT LOGS ===================="
+            tail -n 80 /tmp/gradle_output.log
+            exit 1
+          fi
 
       - name: Copy APK to root
         run: |
@@ -71,6 +79,14 @@ jobs:
           path: ./app-debug.apk
           if-no-files-found: error
           retention-days: 30
+
+      - name: Upload Gradle Build Log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-build-log
+          path: /tmp/gradle_output.log
+          if-no-files-found: ignore
 
       - name: Publish GitHub Release with APK
         uses: softprops/action-gh-release@v2

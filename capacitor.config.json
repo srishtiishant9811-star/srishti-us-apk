@@ -1,0 +1,9 @@
+{
+  "appId": "com.onlyus.srishti",
+  "appName": "Only us",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "cleartext": true
+  }
+}
